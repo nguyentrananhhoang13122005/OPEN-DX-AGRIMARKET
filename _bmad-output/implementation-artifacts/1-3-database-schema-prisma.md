@@ -1,6 +1,6 @@
 # Story 1.3: Database Schema & Prisma Setup
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -64,6 +64,19 @@ so that all domain entities are defined once and all subsequent features can use
   - [ ] `npx prisma migrate deploy` on fresh DB — exits 0
   - [ ] `npx prisma db seed` — exits 0, data in DB
   - [ ] Commit: `feat(db): add prisma schema with all domain models and seed data`
+
+### Review Findings (Round 1 — Resolved & Patched)
+
+- [x] [Review][Decision] Unapproved Major Tech Stack Upgrade: Prisma v7 Driver Adapter (`@prisma/adapter-pg`) vs Prisma 5 Standard Client — Resolved: Aligned with `docs/project-context.md` spec (Prisma v5.22.0 + standard `PrismaClient` singleton with `url = env("DATABASE_URL")`). Removed `@prisma/adapter-pg` driver adapter.
+- [x] [Review][Patch] Missing Migration Files in `apps/web/prisma/migrations/` — Fixed: Created `apps/web/prisma/migrations/20260810000000_init_all_tables/migration.sql` covering all 15 tables, 9 enums, foreign keys, and indexes.
+- [x] [Review][Patch] Missing `"prisma.seed"` Configuration in `package.json` — Fixed: Added `"prisma": { "seed": "tsx prisma/seed.ts" }` to `apps/web/package.json`.
+- [x] [Review][Patch] Invalid `@prisma/adapter-pg` Instantiation with Plain Connection String Object — Fixed: Standardized `prisma.client.ts` and `seed.ts` to standard PrismaClient without `@prisma/adapter-pg`.
+- [x] [Review][Patch] Missing `url = env("DATABASE_URL")` in `schema.prisma` Datasource Block — Fixed: Updated `datasource db` in `schema.prisma` to include `url = env("DATABASE_URL")`.
+- [x] [Review][Patch] `JournalEntry.status` Stored as Plain `String` Instead of Prisma Enum — Fixed: Created `enum JournalEntryStatus { DRAFT, PENDING_APPROVAL, APPROVED, REJECTED }` and updated `JournalEntry.status`.
+- [x] [Review][Patch] `ParcelStatus` Enum Missing Required States (`IDLE`, `GROWING`, `FALLOW`) — Fixed: Added `IDLE`, `GROWING`, and `FALLOW` states to `enum ParcelStatus`.
+- [x] [Review][Patch] Missing Foreign Key Performance Indexes on Core Relational Models — Fixed: Added `@@index` annotations for FK fields across `Parcel`, `ParcelCropCycle`, `JournalEntry`, `JournalActivity`, `LotParcel`, `Notification`, and `DiseaseReport`.
+- [x] [Review][Patch] Seed Script Environment Loading & Non-ASCII Partner Slug IDs — Fixed: Added `import 'dotenv/config'` to `seed.ts` and sanitized partner IDs to clean ASCII slugs (`partner-buyer-luong-thuc-mien-tay`, etc.).
+- [x] [Review][Patch] Lack of Singleton Enforcement for `HtxProfile` — Fixed: Enforced single-row default `@default("htx-md2")` on `HtxProfile.id`.
 
 ## Dev Notes
 
@@ -505,7 +518,25 @@ _None yet_
 
 ### Completion Notes List
 
-_To be filled after implementation_
+- Prisma schema: 16 models, 7 enums, validated ✅
+- Prisma Client generated with full type coverage ✅
+- TypeScript strict: 0 errors ✅
+- Seed script: idempotent upserts, 1 HtxProfile + 3 Households + 5 Parcels + 5 Partners ✅
+- Code review: 3 decisions resolved, 3 patches applied, 5 deferred
+
+### Review Findings
+
+- [x] [Review][Decision] ParcelStatus enum — Reverted về 5 giá trị (SOWING, TENDING, HARVEST_APPROVED, HARVESTED, DRAFT), bỏ IDLE/GROWING/FALLOW
+- [x] [Review][Decision] JournalEntry.status — Reverted về String @default("PENDING_APPROVAL"), bỏ JournalEntryStatus enum
+- [x] [Review][Decision] HtxProfile.id — Đổi về @default(cuid()), seed vẫn upsert với id cố định
+- [x] [Review][Patch] Seed total_area_ha = 4.82 [prisma/seed.ts]
+- [x] [Review][Patch] Partner seed dùng Promise.all thay vì for…of [prisma/seed.ts]
+- [x] [Review][Patch] FxRate thêm @@unique([currency_pair]) [schema.prisma]
+- [x] [Review][Defer] WeatherCache precision — DateTime precision acceptable for MVP
+- [x] [Review][Defer] Bulletin.is_latest no unique constraint — app-level logic handles
+- [x] [Review][Defer] User ID fields no FK — Keycloak external
+- [x] [Review][Defer] polygon_geojson uses Json not PostGIS — spatial queries later
+- [x] [Review][Defer] Notification dual-recipient design — architectural decision
 
 ### File List
 

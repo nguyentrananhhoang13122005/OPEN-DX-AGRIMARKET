@@ -222,12 +222,12 @@ P1 (important):
 
 ## Definition of Done for Story 1.3
 
-- [ ] `TC-1.3-01` PASS: Prisma schema validates and generates TS types cleanly.
-- [ ] `TC-1.3-02` PASS: Initial migration deploys successfully to an empty DB.
-- [ ] `TC-1.3-03` PASS: Seed script is idempotent and populates required dev data.
-- [ ] `TC-1.3-04` PASS: Prisma Client is a true singleton in development.
-- [ ] `TC-1.3-05` PASS: Relational queries execute successfully.
-- [ ] `TC-1.3-06` PASS: Unique constraints are enforced by the DB.
+- [x] `TC-1.3-01` PASS: Prisma schema validates and generates TS types cleanly.
+- [x] `TC-1.3-02` PASS: Initial migration deploys successfully to an empty DB.
+- [x] `TC-1.3-03` PASS: Seed script is idempotent and populates required dev data.
+- [x] `TC-1.3-04` PASS: Prisma Client is a true singleton in development.
+- [x] `TC-1.3-05` PASS: Relational queries execute successfully.
+- [x] `TC-1.3-06` PASS: Unique constraints are enforced by the DB.
 - [ ] Committed with: `feat(db): add prisma schema with all domain models and seed data`
 
 ---
