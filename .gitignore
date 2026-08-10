@@ -1,12 +1,66 @@
+# ============================================
 # Bỏ qua các file không đưa lên mạng
+# ============================================
+
+# --- Dependencies ---
 node_modules/
+.venv/
+apps/disease-api/.venv/
+
+# --- Environment & Secrets ---
 .env
 .env.local
 .env.staging
 .env.production
+# keep example for reference
+!.env.example
+!docker/.env.local.example
+
+# --- Build Outputs ---
 .next/
+dist/
+build/
+out/
+
+# --- Python ---
 __pycache__/
 *.pyc
-apps/disease-api/.venv/
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# --- TypeScript ---
+*.tsbuildinfo
+apps/web/tsconfig.tsbuildinfo
+
+# --- AI Models (binary, large files) ---
 ai-models/
 !ai-models/.gitkeep
+
+# --- IDE & Editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- OS ---
+.DS_Store
+ehthumbs.db
+Desktop.ini
+
+# --- Tooling ---
+.commandcode/
+.gemini/
+
+# --- Temp / Debug scripts ---
+apps/web/check_counts.ts
