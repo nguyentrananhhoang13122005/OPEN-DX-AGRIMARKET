@@ -8,18 +8,34 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "dotenv": "^17.4.2",
     "next": "14.2.5",
     "next-auth": "^5.0.0-beta.32",
+    "pg": "^8.23.0",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.11.0",
+    "@types/pg": "^8.21.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "prisma": "^5.22.0",
+    "ts-jest": "^29.4.12",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }
