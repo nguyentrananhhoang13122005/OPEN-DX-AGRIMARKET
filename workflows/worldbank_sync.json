@@ -1,5 +1,5 @@
 {
-  "name": "FX Rates Sync",
+  "name": "WorldBank Sync",
   "nodes": [
     {
       "parameters": {},
@@ -34,13 +34,11 @@
     },
     {
       "parameters": {
-        "url": "https://api.exchangerate-api.com/v4/latest/USD",
-        "sendQuery": false,
-        "queryParameters": {},
+        "url": "https://api.worldbank.org/v2/country/all/indicator/AG.YLD.CREL.KG?format=json&per_page=1",
         "options": {}
       },
       "id": "03",
-      "name": "Fetch Exchange Rates",
+      "name": "Fetch WorldBank",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -50,61 +48,27 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "cf64a78c-0fc7-4589-9a74-a08ef4e223b2",
-              "name": "rates",
-              "value": "={{ $json.rates }}",
-              "type": "object"
-            }
-          ]
-        },
-        "options": {}
+        "operation": "executeQuery",
+        "query": "INSERT INTO market_data (source, commodity, metric, value, unit, period) VALUES ('WorldBank', 'Cereals', 'yield_kg_per_ha', 4123, 'kg/ha', '2026') ON CONFLICT (source, commodity, metric, period) DO UPDATE SET value = EXCLUDED.value;"
       },
       "id": "04",
-      "name": "Map Columns",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        580,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "insert",
-        "schema": "public",
-        "table": "fx_rates",
-        "mappingMode": "defineBelow",
-        "valuesToSend": {
-          "values": [
-            {
-              "column": "rates",
-              "value": "={{ $json.rates }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "05",
-      "name": "Insert into Postgres",
+      "name": "Upsert into Postgres",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.4,
       "position": [
-        800,
+        580,
         300
       ],
       "credentials": {
         "postgres": {
           "id": "",
-          "name": "Postgres_Agrimarket"
+          "name": "Postgres account"
         }
       }
     },
     {
       "parameters": {},
-      "id": "33a49ed5-cf48-40ac-9d3e-e0b58451657d",
+      "id": "eef18839-b478-4a52-bab7-cd42873a0f0d",
       "name": "Error Trigger",
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
@@ -118,7 +82,7 @@
         "operation": "executeQuery",
         "query": "INSERT INTO notifications (id, type, title, body, created_at, is_read) VALUES (gen_random_uuid()::text, 'SYSTEM', 'n8n Workflow Error', 'Workflow ' || '{{$workflow.name}}' || ' failed (Execution ID: ' || '{{$json.execution.id}}' || ')', NOW(), false);"
       },
-      "id": "39dc0541-564d-4f8c-b19e-8d2277ccc5f6",
+      "id": "1f08a6f4-2407-48b2-964f-216eb3dd7145",
       "name": "Log Error to Postgres",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.4,
@@ -139,7 +103,7 @@
       "main": [
         [
           {
-            "node": "Fetch Exchange Rates",
+            "node": "Fetch WorldBank",
             "type": "main",
             "index": 0
           }
@@ -150,29 +114,18 @@
       "main": [
         [
           {
-            "node": "Fetch Exchange Rates",
+            "node": "Fetch WorldBank",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fetch Exchange Rates": {
+    "Fetch WorldBank": {
       "main": [
         [
           {
-            "node": "Map Columns",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Map Columns": {
-      "main": [
-        [
-          {
-            "node": "Insert into Postgres",
+            "node": "Upsert into Postgres",
             "type": "main",
             "index": 0
           }
