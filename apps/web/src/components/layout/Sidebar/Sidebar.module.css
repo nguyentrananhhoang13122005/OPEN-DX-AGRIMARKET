@@ -1,3 +1,6 @@
+/* Copyright (c) 2026 Nguyen Tran Anh Hoang
+   Licensed under the MIT License. See LICENSE file in the project root for full license information. */
+
 .sidebar {
   display: none; /* hidden on mobile by default */
   width: var(--sidebar-width);
