@@ -3,3 +3,6 @@
 
 export { GetHtxProfileUseCase } from './GetHtxProfileUseCase'
 export { UpdateHtxProfileUseCase } from './UpdateHtxProfileUseCase'
+export { CreateParcelUseCase } from './CreateParcelUseCase'
+export { GetParcelUseCase, ListParcelsUseCase } from './GetParcelUseCase'
+export { UpdateParcelUseCase, DeleteParcelUseCase } from './UpdateParcelUseCase'
