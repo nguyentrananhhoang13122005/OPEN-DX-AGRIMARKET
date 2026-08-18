@@ -6,7 +6,7 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 import type { Layer } from 'leaflet'
-import type { Feature } from 'geojson'
+import type { Feature, GeoJsonObject } from 'geojson'
 import styles from './ZoneMap.module.css'
 import type { Parcel } from '../../../domain/repositories/IParcelRepository'
 
@@ -48,8 +48,7 @@ export default function ZoneMap({ parcels }: ZoneMapProps) {
           return (
             <GeoJSON
               key={parcel.id}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              data={parcel.polygon_geojson as any}
+              data={parcel.polygon_geojson as GeoJsonObject}
               style={{
                 color,
                 weight: 2,
