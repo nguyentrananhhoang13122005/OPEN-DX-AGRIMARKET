@@ -1,0 +1,15 @@
+/* Copyright (c) 2026 Nguyen Tran Anh Hoang
+   Licensed under the MIT License. See LICENSE file in the project root for full license information. */
+
+.mapWrapper {
+  width: 100%;
+  height: 480px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.popup {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
