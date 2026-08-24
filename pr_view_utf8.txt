@@ -1,0 +1,15 @@
+﻿title:	feat(diagnosis): integrate farmer diagnosis UI with production flow
+state:	OPEN
+author:	nguyentrananhhoang13122005 (Nguyß╗àn Trß║ºn Anh Ho├áng)
+labels:	
+assignees:	
+reviewers:	Copilot (AI) (Commented)
+projects:	
+milestone:	
+number:	253
+url:	https://github.com/nguyentrananhhoang13122005/OPEN-DX-AGRIMARKET/pull/253
+additions:	315
+deletions:	97
+auto-merge:	disabled
+--
+Closes #72
