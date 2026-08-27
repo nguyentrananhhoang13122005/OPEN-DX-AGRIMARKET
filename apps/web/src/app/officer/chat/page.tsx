@@ -6,18 +6,18 @@ import { auth } from '@/auth'
 import { ChatInterface } from '@/components/ui/chat-interface/chat-interface'
 
 export const metadata = {
-  title: 'Trợ lý Thị trường | DX-AgriMarket',
-  description: 'Hỏi đáp thông tin thị trường nông sản với trợ lý AI',
+  title: 'Trợ lý Kỹ thuật | DX-AgriMarket',
+  description: 'Hỏi đáp thông tin kỹ thuật canh tác với trợ lý AI',
 }
 
-export default async function ManagerChatPage() {
+export default async function OfficerChatPage() {
   const session = await auth()
   if (!session) redirect('/login')
 
   const role = (session.user as { role?: string }).role
-  if (role !== 'manager' && role !== 'officer') redirect('/unauthorized')
+  if (role !== 'officer') redirect('/unauthorized')
 
   return (
-    <ChatInterface role="manager" />
+    <ChatInterface role="officer" />
   )
 }
