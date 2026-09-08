@@ -63,10 +63,12 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({ role }) => {
 
   // ── SSE integration: revalidate SWR when SSE pushes new notification ───────
   const { latestNotification, unreadCount: sseUnreadCount } = useNotificationSSE(true)
+  const prevNotificationId = useRef<string | null>(null)
 
   useEffect(() => {
-    if (latestNotification) {
-      // New notification arrived via SSE — revalidate SWR to sync
+    if (latestNotification && latestNotification.id !== prevNotificationId.current) {
+      prevNotificationId.current = latestNotification.id
+      // New unique notification arrived via SSE — revalidate SWR to sync
       mutate()
     }
   }, [latestNotification, mutate])

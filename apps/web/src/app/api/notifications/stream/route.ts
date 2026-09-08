@@ -26,8 +26,10 @@ export async function GET(req: Request) {
       controller.enqueue(encoder.encode(`event: connected\ndata: ${JSON.stringify({ message: 'SSE connection established' })}\n\n`))
 
       const sendLatestNotification = async () => {
+        if (req.signal.aborted) return;
         try {
           const result = await getNotificationsUseCase.execute(userId, 1, 'unread')
+          if (req.signal.aborted) return;
           if (result.notifications.length > 0) {
             controller.enqueue(encoder.encode(`event: notification\ndata: ${JSON.stringify(result.notifications[0])}\n\n`))
           }
@@ -38,6 +40,7 @@ export async function GET(req: Request) {
 
       type NotificationPayload = { broadcast?: boolean; userId?: string };
       const handleNewNotification = (data: NotificationPayload) => {
+        if (req.signal.aborted) return;
         if (data.broadcast || data.userId === userId) {
           sendLatestNotification();
         }
@@ -51,7 +54,11 @@ export async function GET(req: Request) {
       req.signal.addEventListener('abort', () => {
         sseEmitter.off(SSE_EVENTS.NEW_NOTIFICATION, handleNewNotification);
         clearInterval(intervalId);
-        controller.close();
+        try {
+          controller.close();
+        } catch (e) {
+          // Ignore if already closed
+        }
       })
     }
   })

@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { auth } from '@/auth'
 import { withErrorHandler } from '@/lib/api/withErrorHandler'
 import { parcelCreateSchema } from '@/lib/validations/parcel.schema'
@@ -56,6 +57,9 @@ async function postParcel(request: Request) {
   const repo = new PrismaParcelRepository()
   const useCase = new CreateParcelUseCase(repo)
   const data = await useCase.execute(parse.data)
+  
+  revalidatePath('/', 'layout')
+  
   return NextResponse.json({ data }, { status: 201 })
 }
 

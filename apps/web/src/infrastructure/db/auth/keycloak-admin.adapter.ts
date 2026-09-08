@@ -68,6 +68,7 @@ export class KeycloakAdminAdapter implements AuthManagementPort {
     // 1. Create User
     const userPayload = {
       username: data.phone,
+      email: `${data.phone}@dx-agrimarket.local`, // Dummy email to bypass Keycloak email requirement
       enabled: enabled,
       firstName: data.fullName.split(' ').slice(0, -1).join(' ') || data.fullName,
       lastName: data.fullName.split(' ').slice(-1)[0] || '',

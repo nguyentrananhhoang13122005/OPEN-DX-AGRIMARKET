@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Cloud, Droplets } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 import { prisma } from '@/infrastructure/db/prisma.client'
 import { auth } from '@/auth'
 import { Pill } from '@/components/ui'
@@ -67,6 +69,8 @@ export default async function FarmerDashboard() {
       }
     }
   })
+
+  console.log('DEBUG DASHBOARD: userId =', userId, 'household =', household?.id, 'parcels count =', household?.parcels.length)
 
   let weather = null
   if (household && household.parcels.length > 0) {

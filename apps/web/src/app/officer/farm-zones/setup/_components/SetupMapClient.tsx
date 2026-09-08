@@ -6,6 +6,7 @@
 import React, { useEffect } from 'react'
 import { MapContainer, TileLayer, useMap, LayersControl } from 'react-leaflet'
 import '@geoman-io/leaflet-geoman-free'
+import { toast } from 'sonner'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 // @ts-ignore: leaflet-geosearch thiếu type definitions chuẩn cho TypeScript
 import { GeoSearchControl, EsriProvider } from 'leaflet-geosearch'
@@ -41,7 +42,7 @@ function SearchAndLocateInit() {
         return await originalSearch(options)
       } catch (error) {
         console.error('GeoSearch Error:', error)
-        alert('Không thể tìm kiếm địa chỉ do kết nối mạng bị chặn (VPN/Proxy) hoặc máy chủ bản đồ quá tải. Vui lòng tắt VPN hoặc tự kéo thả bản đồ.')
+        toast.error('Không thể tìm kiếm địa chỉ do kết nối mạng bị chặn (VPN/Proxy) hoặc máy chủ bản đồ quá tải. Vui lòng tắt VPN hoặc tự kéo thả bản đồ.')
         return []
       }
     }
@@ -97,7 +98,7 @@ function SearchAndLocateInit() {
     }
 
     const onLocationError = (_e: L.ErrorEvent) => {
-      alert('Không thể định vị. Vui lòng kiểm tra xem trình duyệt đã được cấp quyền vị trí chưa.')
+      toast.error('Không thể định vị. Vui lòng kiểm tra xem trình duyệt đã được cấp quyền vị trí chưa.')
     }
 
     map.on('locationfound', onLocationFound)
